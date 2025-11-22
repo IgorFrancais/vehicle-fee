@@ -4,13 +4,14 @@ namespace App\Tests;
 
 use App\ApiResource\FeeCalculation;
 use Generator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class FeeCalculationTest extends TestCase
 {
     private FeeCalculation $feeCalculation;
 
-    public function getVehicleCommonChoiceTests(): Generator
+    public static function getVehicleCommonChoiceTests(): Generator
     {
         yield [398,  39.80,  7.96,  5.00, 100.00,  550.76];
         yield [501,  50.00, 10.02, 10.00, 100.00,  671.02];
@@ -18,15 +19,13 @@ class FeeCalculationTest extends TestCase
         yield [1100, 50.00, 22.00, 15.00, 100.00, 1287.00];
     }
 
-    public function getVehicleLuxeryChoiceTests(): Generator
+    public static function getVehicleLuxeryChoiceTests(): Generator
     {
         yield [1800, 180.00, 72.00, 15.00, 100.00, 2167.00];
         yield [1000000, 200.00, 40000.00, 20.00, 100.00, 1040320.00];
     }
 
-    /**
-     * @dataProvider getVehicleCommonChoiceTests
-     */
+    #[DataProvider('getVehicleCommonChoiceTests')]
     public function testVehicleTypeCommonWithProvider(
         $vehiclePrice,
         $feeBasicExpected,
@@ -35,7 +34,7 @@ class FeeCalculationTest extends TestCase
         $feeStorageExpected,
         $totalExpected
     ): void {
-        $vehicleType = 'Common';
+        $vehicleType = 'common';
 
         $this->runTestVehicleTypeWithProvider(
             $vehicleType,
@@ -48,9 +47,7 @@ class FeeCalculationTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider getVehicleLuxeryChoiceTests
-     */
+    #[DataProvider('getVehicleLuxeryChoiceTests')]
     public function testVehicleTypeLuxuryWithProvider(
         $vehiclePrice,
         $feeBasicExpected,
@@ -59,7 +56,7 @@ class FeeCalculationTest extends TestCase
         $feeStorageExpected,
         $totalExpected
     ): void {
-        $vehicleType = 'Luxury';
+        $vehicleType = 'luxury';
 
         $this->runTestVehicleTypeWithProvider(
             $vehicleType,
