@@ -10,9 +10,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class FeeController extends AbstractController
 {
-    public function __construct(
-        private readonly FeeCalculation $feeCalculation,
-    ) {
+    public function __construct(private readonly FeeCalculation $feeCalculation)
+    {
     }
 
     #[Route('/api/calculate', methods: ['POST'])]
@@ -20,17 +19,7 @@ class FeeController extends AbstractController
     {
         $data = json_decode($request->getContent(), true);
         $vehiclePrice = $data['vehiclePrice'] ?? 0;
-        $vehicleType = strtolower($data['vehicleType'] ?? '');
-
-        // Simple business logic
-//        $multiplier = 0.05;
-//        if ($vehicleType === 'truck') {
-//            $multiplier = 0.08;
-//        } elseif ($vehicleType === 'car') {
-//            $multiplier = 0.06;
-//        }
-
-//        $feeBasic = $vehiclePrice * $multiplier;
+        $vehicleType = strtolower($data['vehicleType'] ?? FeeCalculation::VEHICLE_TYPE_COMMON);
 
         $feeBasic = $this->feeCalculation->calculateFeeBasic($vehiclePrice, $vehicleType);
         $feeSpecial = $this->feeCalculation->calculateFeeSpecial($vehiclePrice, $vehicleType);
