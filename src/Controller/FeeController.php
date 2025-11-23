@@ -18,7 +18,7 @@ class FeeController extends AbstractController
     public function calculate(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
-        $vehiclePrice = $data['vehiclePrice'] ?? 0;
+        $vehiclePrice = $data['vehiclePrice'] ?? 0.0;
         $vehicleType = strtolower($data['vehicleType'] ?? FeeCalculation::VEHICLE_TYPE_COMMON);
 
         $feeBasic = $this->feeCalculation->calculateFeeBasic($vehiclePrice, $vehicleType);

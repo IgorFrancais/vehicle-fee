@@ -19,13 +19,9 @@ class FeeCalculation
     private const int ASSOCIATION_FEE_3000_OVER = 20;
     private const int STORAGE_FEE = 100;
 
-    public function calculateFeeBasic($vehiclePrice, $vehicleType): float
+    public function calculateFeeBasic(float $vehiclePrice, string $vehicleType): float
     {
-        $feeBasic = number_format(
-            $vehiclePrice * (self::BASIC_FEE_PERCENT / 100),
-            2,
-            '.',
-            '');
+        $feeBasic = $this->numberFormat($vehiclePrice, self::BASIC_FEE_PERCENT);
 
         return match ($vehicleType) {
             self::VEHICLE_TYPE_LUXURY => $this->feeFeeBasicLuxury($feeBasic),
@@ -34,7 +30,7 @@ class FeeCalculation
         };
     }
 
-    public function calculateFeeSpecial($vehiclePrice, $vehicleType): float
+    public function calculateFeeSpecial(float $vehiclePrice, string $vehicleType): float
     {
         $feeSpecialPercent = match ($vehicleType) {
             self::VEHICLE_TYPE_COMMON => self::SPECIAL_FEE_PERCENT_COMMON,
@@ -42,11 +38,7 @@ class FeeCalculation
             default => 0,
         };
 
-        return number_format(
-            $vehiclePrice * ($feeSpecialPercent / 100),
-            2,
-            '.',
-            '');
+        return $this->numberFormat($vehiclePrice, $feeSpecialPercent);
     }
 
     public function calculateFeeAssociation($vehiclePrice): float
@@ -65,11 +57,11 @@ class FeeCalculation
     }
 
     public function calculateTotalPrice(
-        $vehiclePrice,
-        $feeBasic,
-        $feeSpecial,
-        $feeAssociation,
-        $feeStorage,
+        float $vehiclePrice,
+        float $feeBasic,
+        float $feeSpecial,
+        float $feeAssociation,
+        float $feeStorage,
     ): float {
         return $vehiclePrice + $feeBasic + $feeSpecial + $feeAssociation + $feeStorage;
     }
@@ -90,5 +82,14 @@ class FeeCalculation
             $feeBasic > self::BASIC_FEE_MAX_COMMON => self::BASIC_FEE_MAX_COMMON,
             default => $feeBasic,
         };
+    }
+
+    private function numberFormat(float $value, int $percent): float
+    {
+        return number_format(
+            $value * ($percent / 100),
+            2,
+            '.',
+            '');
     }
 }

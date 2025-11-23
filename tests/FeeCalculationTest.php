@@ -9,13 +9,11 @@ use PHPUnit\Framework\TestCase;
 
 class FeeCalculationTest extends TestCase
 {
-    private FeeCalculation $feeCalculation;
-
     public static function getVehicleCommonChoiceTests(): Generator
     {
         yield [398,  39.80,  7.96,  5.00, 100.00,  550.76];
         yield [501,  50.00, 10.02, 10.00, 100.00,  671.02];
-        yield [ 57,  10.00,  1.14,  5.00, 100.00,  173.14];
+        yield [57,  10.00,  1.14,  5.00, 100.00,  173.14];
         yield [1100, 50.00, 22.00, 15.00, 100.00, 1287.00];
     }
 
@@ -32,7 +30,7 @@ class FeeCalculationTest extends TestCase
         $feeSpecialExpected,
         $feeAssociationExpected,
         $feeStorageExpected,
-        $totalExpected
+        $totalExpected,
     ): void {
         $vehicleType = 'common';
 
@@ -54,7 +52,7 @@ class FeeCalculationTest extends TestCase
         $feeSpecialExpected,
         $feeAssociationExpected,
         $feeStorageExpected,
-        $totalExpected
+        $totalExpected,
     ): void {
         $vehicleType = 'luxury';
 
@@ -76,23 +74,23 @@ class FeeCalculationTest extends TestCase
         $feeSpecialExpected,
         $feeAssociationExpected,
         $feeStorageExpected,
-        $totalExpected
+        $totalExpected,
     ): void {
-        $this->feeCalculation = new FeeCalculation();
+        $feeCalculation = new FeeCalculation();
 
-        $feeBasic = $this->feeCalculation->calculateFeeBasic($vehiclePrice, $vehicleType);
+        $feeBasic = $feeCalculation->calculateFeeBasic($vehiclePrice, $vehicleType);
         $this->assertSame($feeBasicExpected, $feeBasic);
 
-        $feeSpecial = $this->feeCalculation->calculateFeeSpecial($vehiclePrice, $vehicleType);
+        $feeSpecial = $feeCalculation->calculateFeeSpecial($vehiclePrice, $vehicleType);
         $this->assertSame($feeSpecialExpected, $feeSpecial);
 
-        $feeAssociation = $this->feeCalculation->calculateFeeAssociation($vehiclePrice);
+        $feeAssociation = $feeCalculation->calculateFeeAssociation($vehiclePrice);
         $this->assertSame($feeAssociationExpected, $feeAssociation);
 
-        $feeStorage = $this->feeCalculation->getFeeStorage();
+        $feeStorage = $feeCalculation->getFeeStorage();
         $this->assertSame($feeStorageExpected, $feeStorage);
 
-        $total = $this->feeCalculation->calculateTotalPrice(
+        $total = $feeCalculation->calculateTotalPrice(
             $vehiclePrice,
             $feeBasic,
             $feeSpecial,
