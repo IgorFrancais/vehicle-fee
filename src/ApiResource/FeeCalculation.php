@@ -24,8 +24,8 @@ class FeeCalculation
         $feeBasic = $this->numberFormat($vehiclePrice, self::BASIC_FEE_PERCENT);
 
         return match ($vehicleType) {
-            self::VEHICLE_TYPE_LUXURY => $this->feeFeeBasicLuxury($feeBasic),
-            self::VEHICLE_TYPE_COMMON => $this->feeFeeBasicCommon($feeBasic),
+            self::VEHICLE_TYPE_LUXURY => $this->calculateFeeBasicLuxury($feeBasic),
+            self::VEHICLE_TYPE_COMMON => $this->calculateFeeBasicCommon($feeBasic),
             default => 0,
         };
     }
@@ -66,7 +66,7 @@ class FeeCalculation
         return $vehiclePrice + $feeBasic + $feeSpecial + $feeAssociation + $feeStorage;
     }
 
-    private function feeFeeBasicLuxury(float $feeBasic): float
+    private function calculateFeeBasicLuxury(float $feeBasic): float
     {
         return match (true) {
             $feeBasic < self::BASIC_FEE_MIN_LUXURY => self::BASIC_FEE_MIN_LUXURY,
@@ -75,7 +75,7 @@ class FeeCalculation
         };
     }
 
-    private function feeFeeBasicCommon(float $feeBasic): float
+    private function calculateFeeBasicCommon(float $feeBasic): float
     {
         return match (true) {
             $feeBasic < self::BASIC_FEE_MIN_COMMON => self::BASIC_FEE_MIN_COMMON,
